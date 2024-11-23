@@ -1,0 +1,359 @@
+<div class="card">
+  <div class="container">
+    <button class="new" (click)="toggleFormulario()">New</button>
+    <div *ngIf="mostrarFormulario" class="form-container">
+      <form class="form">
+        <div class="input-group">
+          <label for="cedula">Número de identificación</label>
+          <input
+            type="text"
+            id="cedula"
+            name="cedula"
+            required
+            [(ngModel)]="nuevoTutor.persona.cedula"
+          />
+        </div>
+        <div class="input-group">
+          <label for="primer_nombre">Primer Nombre</label>
+          <input
+            type="text"
+            id="primer_nombre"
+            name="primer_nombre"
+            required
+            [(ngModel)]="nuevoTutor.persona.primer_nombre"
+          />
+        </div>
+        <div class="input-group">
+          <label for="segundo_nombre">Segundo Nombre</label>
+          <input
+            type="text"
+            id="segundo_nombre"
+            name="segundo_nombre"
+            [(ngModel)]="nuevoTutor.persona.segundo_nombre"
+          />
+        </div>
+        <div class="input-group">
+          <label for="primer_apellido">Primer Apellido</label>
+          <input
+            type="text"
+            id="primer_apellido"
+            name="primer_apellido"
+            required
+            [(ngModel)]="nuevoTutor.persona.primer_apellido"
+          />
+        </div>
+        <div class="input-group">
+          <label for="segundo_apellido">Segundo Apellido</label>
+          <input
+            type="text"
+            id="segundo_apellido"
+            name="segundo_apellido"
+            [(ngModel)]="nuevoTutor.persona.segundo_apellido"
+          />
+        </div>
+        <div class="input-group">
+          <label for="genero">Género</label>
+          <select
+            id="genero"
+            name="genero"
+            required
+            [(ngModel)]="nuevoTutor.persona.genero"
+          >
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <!-- Añade el enlace ngModel a los demás campos -->
+        <div class="input-group">
+          <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+          <input
+            type="date"
+            id="fecha_nacimiento"
+            name="fecha_nacimiento"
+            required
+            [(ngModel)]="nuevoTutor.persona.fecha_nacimiento"
+          />
+        </div>
+        <div class="input-group">
+          <label for="estrato">Estrato</label>
+          <input
+            type="text"
+            id="estrato"
+            name="estrato"
+            required
+            [(ngModel)]="nuevoTutor.persona.estrato"
+          />
+        </div>
+        <div class="input-group">
+          <label for="correo">Correo</label>
+          <input
+            type="email"
+            id="correo"
+            name="correo"
+            required
+            [(ngModel)]="nuevoTutor.correo"
+          />
+        </div>
+        <div class="input-group">
+          <label for="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            [(ngModel)]="nuevoTutor.persona.password"
+          />
+        </div>
+        <div class="input-group">
+          <label for="instituciones">Institución</label>
+          <input
+            type="number"
+            id="instituciones"
+            name="instituciones"
+            required
+            [(ngModel)]="nuevoTutor.instituciones"
+          />
+        </div>
+        <div class="input-group">
+          <label for="aula">Aula</label>
+          <input
+            type="number"
+            id="aula"
+            name="aula"
+            required
+            [(ngModel)]="nuevoTutor.aula"
+          />
+        </div>
+        <div class="input-group">
+          <label for="telefono">Teléfono</label>
+          <input
+            type="text"
+            id="telefono"
+            name="telefono"
+            required
+            [(ngModel)]="nuevoTutor.telefono"
+          />
+        </div>
+        <div class="input-group">
+          <label for="direccion">Dirección</label>
+          <input
+            type="text"
+            id="direccion"
+            name="direccion"
+            required
+            [(ngModel)]="nuevoTutor.direccion"
+          />
+        </div>
+        <div class="button-container">
+          <button type="submit" class="submit-btn" (click)="crearTutor()">
+            Crear Tutor
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <h1 class="title">Gestión de tutores</h1>
+
+  <p-toast></p-toast>
+  <p-table
+    [value]="tutores"
+    dataKey="id"
+    editMode="row"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 20%">Nombres</th>
+        <th style="width: 20%">Apellidos</th>
+        <th style="width: 20%">Cedula</th>
+        <th style="width: 20%">Fecha de Nacimiento</th>
+        <th style="width: 20%">Estrato</th>
+        <th style="width: 20%">Telefono</th>
+        <th style="width: 20%">Correo</th>
+        <th style="width: 20%">Direccion</th>
+        <th style="width: 20%"></th>
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-tutor
+      let-editing="editing"
+      let-ri="rowIndex"
+    >
+      <tr [pEditableRow]="tutor">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.persona.primer_nombre"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.persona.primer_nombre }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.persona.primer_apellido"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.persona.primer_apellido }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.persona.cedula"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.persona.cedula }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.persona.fecha_nacimiento"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.persona.fecha_nacimiento }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.persona.estrato"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.persona.estrato }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.telefono"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.telefono }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.correo"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.correo }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="tutor.direccion"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ tutor.direccion }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              pInitEditableRow
+              icon="pi pi-pencil"
+              (click)="onRowEditInit(tutor)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-eraser"
+              (click)="onRowEditDelete(tutor, ri)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(tutor)"
+              class="p-button-rounded p-button-text p-button-success mr-2"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(tutor, ri)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

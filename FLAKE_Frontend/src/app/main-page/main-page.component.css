@@ -1,0 +1,155 @@
+.topbar {
+  background-color: #8999d6;
+  width: 100%;
+  display: flex;
+  gap: 9px;
+  height: 60px;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+.layout {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  margin: 0;
+  grid:
+    "topbar topbar topbar" auto
+    "leftSide body body" 1fr
+    / auto 1fr;
+  gap: 8px;
+}
+.topbar {
+  grid-area: topbar;
+}
+.body {
+  grid-area: body;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.topbar-title {
+  color: white;
+  font-size: 20px;
+  margin: 0;
+  transform: translateX(-10%);
+}
+
+.topbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.logout {
+  padding: 10px;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #ffffff0f;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+
+.sidebar {
+  width: 200px;
+  height: 89vh;
+  background-color: #666f8f1f;
+  display: flex;
+  flex: 0 0 200px;
+  flex-direction: column;
+  padding: 10px;
+  border: #7886bb;
+  border-right-color: #a2b3fb8e;
+  margin-left: 0.9rem;
+}
+.side {
+  display: flex;
+  flex-direction: column;
+  border: #7886bb;
+  border-radius: 4rem;
+}
+.sidebar-btn {
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 15px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #d2b3fb00;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-align: center  ;
+}
+.sidebar-btn:hover {
+  background-color: #7886bb;
+  transform: scale(1);
+}
+
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px, 2px);
+}
+
+.welcome-message {
+  justify-content: center;
+  text-align: center;
+  margin: 20px 0;
+  z-index: 1;
+  flex: 1 1 auto;
+}
+
+.welcome-message h2 {
+  justify-content: center;
+  font-size: 24px;
+  color: #333;
+}
+
+.welcome-message p {
+  justify-content: center;
+  font-size: 16px;
+  color: #666;
+}
+
+.background-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 460px; /* Ajusta la altura según sea necesario */
+  background-image: url("/backmountain.png"); /* Reemplaza con la ruta de tu imagen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  opacity: 96%;
+  z-index: 0;
+}

@@ -1,0 +1,10 @@
+<div class="profile-container" *ngIf="userInfo">
+  <h2>Perfil de Usuario</h2>
+  <div class="profile-info">
+    <p><strong>Cédula:</strong> {{ userInfo.cedula }}</p>
+    <p><strong>Nombre:</strong> {{ userInfo.primer_nombre }} {{ userInfo.segundo_nombre ? userInfo.segundo_nombre : '' }} {{ userInfo.primer_apellido }} {{ userInfo.segundo_apellido }}</p>
+    <p><strong>Género:</strong> {{ userInfo.genero }}</p>
+    <p><strong>Fecha de Nacimiento:</strong> {{ userInfo.fecha_nacimiento | date }}</p>
+    <p><strong>Estrato:</strong> {{ userInfo.estrato }}</p>
+  </div>
+</div>

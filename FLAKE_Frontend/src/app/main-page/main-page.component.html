@@ -1,0 +1,25 @@
+<main class="layout">
+  <section class="topbar">
+    <h1 class="topbar-title">Año Lectivo</h1>
+    <div class="button-container">
+      <button class="logout" (click)="logout()">Logout</button>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <div class="side">
+      <ng-container *ngFor="let ruta of rutasAside; let i = index">
+        <a [routerLink]="ruta.path" class="sidebar-btn">{{ ruta.nombre }}</a>
+      </ng-container>
+    </div>
+  </aside>
+
+  <section class="body">
+    <div *ngIf="showWelcomeMessage" class="welcome-message">
+      <h2>¡Bienvenido!</h2>
+      <p>FOREIGN LANGUAGE FOR KIDS EMPOWERMENT</p>
+      <div class="background-image"></div>
+    </div>
+    <router-outlet (activate)="onActivate()"></router-outlet>
+  </section>
+</main>

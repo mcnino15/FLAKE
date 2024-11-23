@@ -1,0 +1,277 @@
+<div class="card table-container">
+  <button class="new" (click)="toggleFormulario()">New</button>
+  <h1 class="title">Gestión de estudiantes</h1>
+  <p-toast></p-toast>
+  <p-table
+    [value]="estudiantes"
+    dataKey="id"
+    editMode="row"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 20%">Nombres</th>
+        <th style="width: 20%">Apellidos</th>
+        <th style="width: 20%">Numero de identidad</th>
+        <th style="width: 20%">Fecha de Nacimiento</th>
+        <th style="width: 20%">Estrato</th>
+        <th style="width: 20%">genero</th>
+        <th style="width: 20%">Institucion</th>
+        <th style="width: 20%">Grado</th>
+        <th style="width: 20%">Grupo</th>
+        <th style="width: 20%"></th>
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-estudiante
+      let-editing="editing"
+      let-ri="rowIndex"
+    >
+      <tr [pEditableRow]="estudiante">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.persona.primer_nombre"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.persona.primer_nombre }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.persona.primer_apellido"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.persona.primer_apellido }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.persona.cedula"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.persona.cedula }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.persona.fecha_nacimiento"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.persona.fecha_nacimiento }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.persona.estrato"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.persona.estrato }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.persona.genero"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.persona.genero }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.instituciones.instnombre"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.instituciones.instnombre }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.aula.grado"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.aula.grado }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="estudiante.aula.grupo"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ estudiante.aula.grupo }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              pInitEditableRow
+              icon="pi pi-pencil"
+              (click)="onRowEditInit(estudiante)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-eraser"
+              (click)="onRowEditDelete(estudiante, ri)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(estudiante)"
+              class="p-button-rounded p-button-text p-button-success mr-2"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(estudiante, ri)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div *ngIf="mostrarFormulario" class="form-container">
+  <div class="input-group">
+    <label for="cedula">Número de identificación</label>
+    <input type="text" [(ngModel)]="nuevostudent.cedula" required />
+  </div>
+  <div class="input-group">
+    <label for="primer_nombre">Primer Nombre</label>
+    <input type="text" [(ngModel)]="nuevostudent.primer_nombre" required />
+  </div>
+  <div class="input-group">
+    <label for="segundo_nombre">Segundo Nombre</label>
+    <input type="text" [(ngModel)]="nuevostudent.segundo_nombre" />
+  </div>
+  <div class="input-group">
+    <label for="primer_apellido">Primer Apellido</label>
+    <input type="text" [(ngModel)]="nuevostudent.primer_apellido" required />
+  </div>
+  <div class="input-group">
+    <label for="segundo_apellido">Segundo Apellido</label>
+    <input type="text" [(ngModel)]="nuevostudent.segundo_apellido" />
+  </div>
+  <div class="input-group">
+    <label for="genero">Género</label>
+    <select
+      id="genero"
+      name="genero"
+      required
+      [(ngModel)]="nuevostudent.genero"
+    >
+      <option value="" disabled selected>Seleccione una opción</option>
+      <option value="M">Masculino</option>
+      <option value="F">Femenino</option>
+    </select>
+  </div>
+  <div class="input-group">
+    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+    <input type="date" [(ngModel)]="nuevostudent.fecha_nacimiento" required />
+  </div>
+  <div class="input-group">
+    <label for="estrato">Estrato</label>
+    <input type="text" [(ngModel)]="nuevostudent.estrato" required />
+  </div>
+
+  <div class="input-group">
+    <label for="instituciones">Instituciones</label>
+    <input type="text" [(ngModel)]="nuevostudent.instituciones" required />
+  </div>
+  <div class="input-group">
+    <label for="aula">Aula</label>
+    <input type="text" [(ngModel)]="nuevostudent.aula" required />
+  </div>
+  <div class="button-container">
+    <button type="submit" class="submit-btn" (click)="crearEstudiante()">
+      Crear Estudiante
+    </button>
+  </div>
+</div>

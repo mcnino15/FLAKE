@@ -1,0 +1,162 @@
+<div class="card table-container">
+  <button class="new" (click)="toggleFormulario()">New</button>
+  <h2>Gestion de Instituciones</h2>
+  <p-toast></p-toast>
+  <p-table
+    [value]="instituciones"
+    dataKey="idinstitucion"
+    editMode="row"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 20%">Institucion</th>
+        <th style="width: 20%">Barrio</th>
+        <th style="width: 20%">Direccion</th>
+        <th style="width: 10%"></th>
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-institucion
+      let-editing="editing"
+      let-ri="rowIndex"
+    >
+      <tr [pEditableRow]="institucion">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="institucion.instnombre"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ institucion.instnombre }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="institucion.barrio"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ institucion.barrio }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="institucion.direccion"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ institucion.direccion }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <div class="v-d">
+              <button
+                *ngIf="!editing"
+                pButton
+                pRipple
+                type="button"
+                pInitEditableRow
+                icon="pi pi-pencil"
+                (click)="onRowEditInit(institucion)"
+                class="p-button-rounded p-button-text"
+              ></button>
+              <button
+                *ngIf="!editing"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-eraser"
+                (click)="onRowEditDelete(institucion, ri)"
+                class="p-button-rounded p-button-text"
+              ></button>
+            </div>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(institucion)"
+              class="p-button-rounded p-button-text p-button-success mr-2"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(institucion, ri)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div *ngIf="mostrarFormulario" class="crear-institucion">
+  <h2>Crear Nueva Institución</h2>
+  <form>
+    <div class="input-group">
+      <label for="instnombre">Nombre</label>
+      <input
+        type="text"
+        id="instnombre"
+        [(ngModel)]="nuevaInstitucion.instnombre"
+        name="instnombre"
+        required
+      />
+    </div>
+    <div class="input-group">
+      <label for="direccion">Dirección</label>
+      <input
+        type="text"
+        id="direccion"
+        [(ngModel)]="nuevaInstitucion.direccion"
+        name="direccion"
+        required
+      />
+    </div>
+    <div class="input-group">
+      <label for="barrio">Barrio</label>
+      <input
+        type="text"
+        id="barrio"
+        [(ngModel)]="nuevaInstitucion.barrio"
+        name="barrio"
+        required
+      />
+    </div>
+    <div class="button-container">
+      <button (click)="crearInstitucion()" class="submit-btn">
+        Crear Institución
+      </button>
+    </div>
+  </form>
+</div>
