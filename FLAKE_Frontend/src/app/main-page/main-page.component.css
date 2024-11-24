@@ -5,15 +5,15 @@
   gap: 9px;
 
   justify-content: space-between;
-  padding-inline: 4rem;
+  padding-inline: 5rem;
 
   overflow-y: hidden;
   align-items: center;
   position: relative;
 }
 .logo {
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
 }
 .layout {
   width: 100vw;
