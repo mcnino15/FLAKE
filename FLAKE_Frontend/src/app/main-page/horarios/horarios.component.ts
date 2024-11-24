@@ -4,13 +4,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { HorarioService, HorarioSend } from '../../services/horario.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { CommonModule } from '@angular/common';
 interface Dia {
   name: string;
   code: string;
 }
 @Component({
   selector: 'app-horarios',
-  imports: [FormsModule, InputTextModule, FloatLabelModule, DropdownModule],
+  imports: [FormsModule, InputTextModule, FloatLabelModule, DropdownModule, CommonModule],
   templateUrl: './horarios.component.html',
   styleUrls: ['./horarios.component.css'],
 })
@@ -24,8 +25,7 @@ export class HorariosComponent implements OnInit {
       { name: 'Miércoles', code: 'MI' },
       { name: 'Jueves', code: 'JU' },
       { name: 'Viernes', code: 'VI' },
-      { name: 'Sábado', code: 'SA' },
-      { name: 'Domingo', code: 'DO' },
+
     ];
   }
   horario: HorarioSend = {
@@ -41,6 +41,11 @@ export class HorariosComponent implements OnInit {
 
   constructor(private horarioService: HorarioService) {}
 
+  mostrarFormulario = false;
+  
+  toggleFormulario(): void {
+    this.mostrarFormulario = !this.mostrarFormulario;
+  }
   crearHorario() {
     // Asegura que las horas estén en formato 'HH:MM'
     if (this.horario.hora_inicio) {

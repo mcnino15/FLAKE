@@ -1,5 +1,8 @@
 <section>
-  <form (ngSubmit)="crearHorario()" #horarioForm="ngForm" class="form">
+  <div class="button-container">
+    <button class="new" (click)="toggleFormulario()">New</button>
+  </div>
+  <form *ngIf="mostrarFormulario" (ngSubmit)="crearHorario()" #horarioForm="ngForm" class="form">
     <div>
       <input
         pInputText
@@ -97,6 +100,6 @@
       <label for="profesor">Profesor</label>
     </p-floatLabel>
 
-    <button type="submit" pButton label="Crear Horario">Crea horario</button>
+    <button type="submit" pButton label="Crear Horario" class="boton-crear">Crear Horario</button>
   </form>
 </section>

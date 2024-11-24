@@ -19,11 +19,11 @@ export class MainPageComponent {
   router = inject(Router);
   showWelcomeMessage: boolean = true;
   rutasAside = [
-    { nombre: 'Perfil', path: 'profile' },
-    { nombre: 'Gestión de estudiantes', path: 'students' },
-    { nombre: 'Gestión de tutores', path: 'tutors' },
-    { nombre: 'Gestión de aulas', path: 'aulasmg' },
-    { nombre: 'Instituciones', path: 'institutionsmg' },
+    { nombre: 'Perfil', path: 'profile'},
+    { nombre: 'Gestión de estudiantes', path: 'students', icon:'pi pi-users' },
+    { nombre: 'Gestión de tutores', path: 'tutors', icon:'pi pi-briefcase' },
+    { nombre: 'Gestión de aulas', path: 'aulasmg' , icon:'pi pi-home'},
+    { nombre: 'Instituciones', path: 'institutionsmg'},
     { nombre: 'Aulas', path: 'aula' },
     { nombre: 'Asistencias', path: 'assistance' },
     { nombre: 'Horarios', path: 'schedules' },
