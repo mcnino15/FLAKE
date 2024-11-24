@@ -13,6 +13,7 @@ import { MessageService, SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-institution-manager',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -53,12 +54,26 @@ export class InstitutionManagerComponent {
   }
 
   onRowEditSave(instituciones: Institucion) {
-    delete this.clonedProducts[instituciones.idinstitucion];
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Table is updated',
-    });
+    this.institucionService.updateInstitucion(instituciones).subscribe(
+      (response)=> {
+        console.log('Institucion actualizada', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Institucion actualizada',
+        });
+        delete this.clonedProducts[instituciones.idinstitucion];
+      },
+      (error) => {
+        console.error('Error al actualizar la institucion', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al actualizar la institucion',
+        });
+      }
+    );
+  
   }
   onRowEditCancel(institucion: Institucion, index: number) {
     this.instituciones[index] =
@@ -92,9 +107,13 @@ export class InstitutionManagerComponent {
   }
 
   crearInstitucion(): void {
-    this.institucionService
-      .crearInstitucion(this.nuevaInstitucion)
-      .subscribe((data) => {
+    this.institucionService.crearInstitucion(this.nuevaInstitucion).subscribe(
+      (data) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Tutor creado exitosamente',
+        });
         this.instituciones.push(data);
         this.nuevaInstitucion = {
           idinstitucion: 0,
@@ -103,6 +122,15 @@ export class InstitutionManagerComponent {
           barrio: '',
         };
         this.mostrarFormulario = false; // Ocultar el formulario después de crear la institución
-      });
+      },
+      (error) => {
+        console.error('Error al crear el tutor:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al crear el tutor',
+        });
+      }
+    );
   }
 }

@@ -58,7 +58,7 @@
       let-editing="editing"
       let-ri="rowIndex"
     >
-      @for (aula of aulas; track aula.idaula) {
+      
       <tr [pEditableRow]="aula">
         <td>
           <p-cellEditor>
@@ -113,6 +113,21 @@
             </ng-template>
           </p-cellEditor>
         </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="aula.institucion"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ aula.institucion }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
 
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
@@ -152,13 +167,13 @@
               type="button"
               pCancelEditableRow
               icon="pi pi-times"
-              (click)="onRowEditCancel(aula, $index)"
+              (click)="onRowEditCancel(aula, ri)"
               class="p-button-rounded p-button-text p-button-danger"
             ></button>
           </div>
         </td>
       </tr>
-      }
+      
     </ng-template>
   </p-table>
 </div>

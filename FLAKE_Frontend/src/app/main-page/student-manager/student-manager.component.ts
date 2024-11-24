@@ -1,6 +1,6 @@
 import { Estudiante, EstudianteCrear } from './../../model/estudiante.model';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -14,6 +14,7 @@ import { EstudiantesService } from '../../services/estudiantes.service';
 
 @Component({
   selector: 'app-student-manager',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -28,7 +29,7 @@ import { EstudiantesService } from '../../services/estudiantes.service';
   styleUrls: ['./student-manager.component.css'],
   providers: [MessageService, EstudiantesService],
 })
-export class StudentManagerComponent {
+export class StudentManagerComponent implements OnInit{
   estudiantes: Estudiante[] = [];
   private messageService = inject(MessageService);
   private estudiantesService = inject(EstudiantesService);

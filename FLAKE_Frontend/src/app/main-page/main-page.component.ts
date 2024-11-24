@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './main-page.component.css',
 })
 export class MainPageComponent {
+  dateToday = new Date();
   auth = inject(AuthService);
   profileService = inject(ProfileService);
   router = inject(Router);

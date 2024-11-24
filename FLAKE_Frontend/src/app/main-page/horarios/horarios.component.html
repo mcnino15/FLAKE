@@ -1,6 +1,102 @@
 <section>
-  <p-floatLabel>
-    <input pInputText id="username" [(ngModel)]="value" />
-    <label for="username">Username</label>
-</p-floatLabel>
+  <form (ngSubmit)="crearHorario()" #horarioForm="ngForm" class="form">
+    <div>
+      <input
+        pInputText
+        id="fechainicio"
+        name="fechainicio"
+        type="date"
+        [(ngModel)]="horario.fechainicio"
+        required
+      />
+      <label for="fechainicio">Fecha Inicio</label>
+    </div>
+
+    <div>
+      <input
+        pInputText
+        id="fechafin"
+        name="fechafin"
+        type="date"
+        [(ngModel)]="horario.fechafin"
+        required
+      />
+      <label for="fechafin">Fecha Fin</label>
+    </div>
+
+    <div>
+      <input
+        pInputText
+        id="hora_inicio"
+        name="hora_inicio"
+        type="time"
+        [(ngModel)]="horario.hora_inicio"
+        required
+      />
+      <label for="hora_inicio">Hora Inicio</label>
+    </div>
+
+    <div>
+      <input
+        pInputText
+        id="hora_fin"
+        name="hora_fin"
+        type="time"
+        [(ngModel)]="horario.hora_fin"
+        required
+      />
+      <label for="hora_fin">Hora Fin</label>
+    </div>
+
+    <div class="card">
+      <p-dropdown
+        [options]="dias"
+        id="diainicial"
+        name="diainicial"
+        optionLabel="name"
+        optionValue="code"
+        placeholder="Seleccione un día"
+        [(ngModel)]="horario.diainicial"
+        required
+      />
+      <label for="diainicial">Día Inicial</label>
+    </div>
+
+    <p-floatLabel>
+      <input
+        pInputText
+        id="diainicial_text"
+        name="diainicial_text"
+        [(ngModel)]="horario.diainicial_text"
+        required
+      />
+      <label for="diainicial_text">Día Inicial Texto</label>
+    </p-floatLabel>
+
+    <p-floatLabel>
+      <input
+        pInputText
+        id="aula"
+        name="aula"
+        type="number"
+        [(ngModel)]="horario.aula"
+        required
+      />
+      <label for="aula">Aula</label>
+    </p-floatLabel>
+
+    <p-floatLabel>
+      <input
+        pInputText
+        id="profesor"
+        name="profesor"
+        type="number"
+        [(ngModel)]="horario.profesor"
+        required
+      />
+      <label for="profesor">Profesor</label>
+    </p-floatLabel>
+
+    <button type="submit" pButton label="Crear Horario">Crea horario</button>
+  </form>
 </section>

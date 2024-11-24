@@ -24,7 +24,7 @@ export class EstudiantesService {
   updateEstudiante(estudiante: any): Observable<Estudiante[]> {
     const url = `${this.apiURLnew}${estudiante.idestudiante}/`;
     console.log('Updating estudiante at URL:', url);
-    return this.http.put<Estudiante[]>(url, estudiante);
+    return this.http.put<Estudiante[]>(url, estudiante);  
   }
 
   deleteEstudiante(estudiante: Estudiante): Observable<Estudiante> {

@@ -1,0 +1,17 @@
+<div class="card flex justify-content-center">
+  <a [routerLink]="aula().idaula.toString()">
+    <p-card
+      [header]="'Grupo: ' + aula().grupo.toString()"
+      [style]="{ width: '360px' }"
+    >
+      <h3>Jornada</h3>
+      <p>
+        {{ aula().jornada }}
+      </p>
+      <h3>Institución</h3>
+      <p>
+        {{ aula().institucion }}
+      </p>
+    </p-card>
+  </a>
+</div>

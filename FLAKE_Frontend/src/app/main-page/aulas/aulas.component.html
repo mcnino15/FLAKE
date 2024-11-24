@@ -1,1 +1,5 @@
-<p>aulas works!</p>
+<section class="aula-section">
+  @for (aula of aulas; track aula.idaula) {
+  <app-aula [aula]="aula"></app-aula>
+  }
+</section>

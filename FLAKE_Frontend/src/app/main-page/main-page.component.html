@@ -1,6 +1,7 @@
 <main class="layout">
   <section class="topbar">
-    <h1 class="topbar-title">Año Lectivo</h1>
+    <img src="/logo.png" class="logo" alt="" />
+    <h1 class="topbar-title">Año Lectivo {{ dateToday.getFullYear() }}</h1>
     <div class="button-container">
       <button class="logout" (click)="logout()">Logout</button>
     </div>
