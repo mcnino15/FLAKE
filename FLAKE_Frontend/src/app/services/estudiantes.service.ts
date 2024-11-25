@@ -12,7 +12,7 @@ export class EstudiantesService {
 
   crearEstudiante(estudiante: EstudianteCrear): Observable<Estudiante> {
     return this.http.post<Estudiante>(
-      this.apiURLnew + 'crear-estudiante/',
+      this.apiURLnew + 'crearestudiante/',
       estudiante
     );
   }

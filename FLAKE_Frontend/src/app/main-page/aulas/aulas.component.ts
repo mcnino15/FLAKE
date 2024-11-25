@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AulaService } from '../../services/aula.service';
-import { Aula } from '../../model/estudiante.model';
+import { Aula } from '../../model/aula.model';
 import { AulaComponent } from "./aula/aula.component";
 
 @Component({
@@ -12,6 +12,8 @@ import { AulaComponent } from "./aula/aula.component";
 export class AulasComponent implements OnInit {
   aulaService = inject(AulaService);
   aulas: Aula[] = [];
+
+
   ngOnInit(): void {
     this.aulaService.getAulas().subscribe((data) => {
       this.aulas = data;
