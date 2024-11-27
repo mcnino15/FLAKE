@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService, SelectItem } from 'primeng/api';
 import { EstudiantesService } from '../../services/estudiantes.service';
-
+import { Aula } from '../../model/aula.model';
 
 @Component({
   selector: 'app-student-manager',
@@ -29,7 +29,7 @@ import { EstudiantesService } from '../../services/estudiantes.service';
   styleUrls: ['./student-manager.component.css'],
   providers: [MessageService, EstudiantesService],
 })
-export class StudentManagerComponent implements OnInit{
+export class StudentManagerComponent implements OnInit {
   estudiantes: Estudiante[] = [];
   private messageService = inject(MessageService);
   private estudiantesService = inject(EstudiantesService);
@@ -37,18 +37,17 @@ export class StudentManagerComponent implements OnInit{
   clonedProducts: { [s: string]: Estudiante } = {};
 
   nuevostudent: EstudianteCrear = {
-  cedula: "" ,
-  primer_nombre: "",
-  segundo_nombre: "",
-  primer_apellido:"",
-  segundo_apellido: "",
-  genero: "",
-  fecha_nacimiento: new Date(),
-  estrato:  "",
-  password: "",
-  instituciones: 1,
-  aula: 1
-    
+    cedula: '',
+    primer_nombre: '',
+    segundo_nombre: '',
+    primer_apellido: '',
+    segundo_apellido: '',
+    genero: '',
+    fecha_nacimiento: new Date(),
+    estrato: '',
+    password: '1',
+    instituciones: 0,
+    aula: 0,
   };
 
   mostrarFormulario = false;
@@ -65,28 +64,19 @@ export class StudentManagerComponent implements OnInit{
 
   onRowEditInit(estudiante: Estudiante) {
     this.clonedProducts[estudiante.idestudiante] = { ...estudiante };
+    console.table(this.clonedProducts);
   }
 
   onRowEditSave(estudiante: Estudiante) {
     console.log('Datos enviados para actualizar:', estudiante);
     this.estudiantesService.updateEstudiante(estudiante).subscribe(
-      (response) => {
-        // Manejar la respuesta exitosa
-        console.log('Estudiante actualizado', response);
+      (response) => {       
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
           detail: 'Table is updated',
         });
         delete this.clonedProducts[estudiante.idestudiante as number];
-      },
-      (error) => {
-        console.error('Error al actualizar el estudiante', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al actualizar el estudiante',
-        });
       }
     );
   }
@@ -126,23 +116,22 @@ export class StudentManagerComponent implements OnInit{
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Tutor creado exitosamente',
+          detail: 'Estudiante creado exitosamente',
         });
         this.estudiantes.push(data);
-        this.nuevostudent =  {
-          cedula: "" ,
-          primer_nombre: "",
-          segundo_nombre: "",
-          primer_apellido:"",
-          segundo_apellido: "",
-          genero: "",
+        this.nuevostudent = {
+          cedula: '',
+          primer_nombre: '',
+          segundo_nombre: '',
+          primer_apellido: '',
+          segundo_apellido: '',
+          genero: '',
           fecha_nacimiento: new Date(),
-          estrato:  "",
-          password: "",
+          estrato: '',
+          password: '',
           instituciones: 1,
-          aula: 1
-            
-          };
+          aula: 1,
+        };
         this.mostrarFormulario = false;
       },
       (error) => {

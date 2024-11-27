@@ -2,7 +2,12 @@
   <div class="button-container">
     <button class="new" (click)="toggleFormulario()">New</button>
   </div>
-  <form *ngIf="mostrarFormulario" (ngSubmit)="crearHorario()" #horarioForm="ngForm" class="form">
+  <form
+    *ngIf="mostrarFormulario"
+    (ngSubmit)="crearHorarioAula()"
+    #horarioForm="ngForm"
+    class="form"
+  >
     <div>
       <input
         pInputText
@@ -88,18 +93,9 @@
       <label for="aula">Aula</label>
     </p-floatLabel>
 
-    <p-floatLabel>
-      <input
-        pInputText
-        id="profesor"
-        name="profesor"
-        type="number"
-        [(ngModel)]="horario.profesor"
-        required
-      />
-      <label for="profesor">Profesor</label>
-    </p-floatLabel>
-
-    <button type="submit" pButton label="Crear Horario" class="boton-crear">Crear Horario</button>
+    <button type="submit" pButton label="Crear Horario" class="boton-crear">
+      Crear Horario
+    </button>
   </form>
+  <ejs-schedule #scheduleObj [eventSettings]="eventSettings"> </ejs-schedule>
 </section>

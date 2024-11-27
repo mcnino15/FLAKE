@@ -1,9 +1,12 @@
 <main class="layout">
   <section class="topbar">
-    <img src="/logo.png" class="logo" alt="" />
+    <button (click)="mainPage()" class="menu-button">
+      <img src="/logo.png" class="logo" alt="" />
+    </button>
     <h1 class="topbar-title">Año Lectivo {{ dateToday.getFullYear() }}</h1>
     <div class="button-container">
-      <button class="logout" (click)="logout()">Logout 
+      <button class="logout" (click)="logout()">
+        Logout
         <i class="pi pi-sign-out"></i>
       </button>
     </div>
@@ -11,13 +14,13 @@
 
   <aside class="sidebar">
     <div class="side">
-      <ng-container *ngFor="let ruta of rutasAside; let i = index">
-        <a [routerLink]="ruta.path" class="sidebar-btn">
-          <i [class]="ruta.icon"></i> 
-          <span>{{ ruta.nombre }}</span>
-        </a>
-          
-      </ng-container>
+      @for (ruta of rutasAside; track $index) { @if(ruta.forTutor && isTutor ||
+      !isTutor ){
+      <a [routerLink]="ruta.path" class="sidebar-btn">
+        <i [class]="ruta.icon"></i>
+        <span>{{ ruta.nombre }}</span>
+      </a>
+      } }
     </div>
   </aside>
 

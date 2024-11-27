@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-export enum StorageKey{
-  TOKEN="token",
-  REFRESH = "refresh"
+export enum StorageKey {
+  TOKEN = 'token',
+  REFRESH = 'refresh',
+  ROLE = 'role',
+  ID = 'id',
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocalStorageManagerService {
-
-  constructor() { }
-  setLocalStorage(storageKey: StorageKey,value: string){
+  constructor() {}
+  setLocalStorage(storageKey: StorageKey, value: string) {
     localStorage.setItem(storageKey, value);
   }
-  getLocalStorage(storageKey: StorageKey){
+  getLocalStorage(storageKey: StorageKey) {
     return localStorage.getItem(storageKey);
   }
-  removeLocalStorage(storageKey: StorageKey){
+  removeLocalStorage(storageKey: StorageKey) {
     localStorage.removeItem(storageKey);
   }
-  clearLocalStorage(){
+  clearLocalStorage() {
     localStorage.clear();
   }
-
 }

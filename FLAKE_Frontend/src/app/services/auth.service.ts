@@ -21,12 +21,12 @@ export class AuthService {
   http = inject(HttpClient);
   localStorageManager = inject(LocalStorageManagerService);
   generalStatesManagementService = inject(GeneralStatesManagementService);
-  readonly baseUrl = 'http://localhost:8000';
+  readonly baseUrl = 'http://localhost:8000/api/';
 
   login(credentials: Credentials): Observable<AuthTokens> {
     this.generalStatesManagementService.loading.set(true);
     return this.http
-      .post<AuthTokens>(`${this.baseUrl}/login/`, credentials)
+      .post<AuthTokens>(`${this.baseUrl}token/`, credentials)
       .pipe(
         finalize(() => {
           this.generalStatesManagementService.loading.set(false);
@@ -46,8 +46,14 @@ export class AuthService {
   getUserInfo(): Observable<Persona> {
     const token = this.localStorageManager.getLocalStorage(StorageKey.TOKEN);
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<Persona>(`${this.baseUrl}/api/personas/me/`, {
+    return this.http.get<Persona>(`${this.baseUrl}personas/me/`, {
       headers,
     });
+  }
+  isAdministrator(): boolean {
+    return (
+      this.localStorageManager.getLocalStorage(StorageKey.ROLE) ===
+      'administrador'
+    );
   }
 }

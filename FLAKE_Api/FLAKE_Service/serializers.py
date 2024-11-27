@@ -1,4 +1,4 @@
-from .models import Tutor ,Administrador, Persona, horario, Aula, Instituciones, asistencia, Estudiante, Notas,AsistenciaTutor
+from .models import Tutor ,Administrador, Persona, horario, Aula, Instituciones, asistencia, Estudiante, Notas,AsistenciaTutor, horario_aula
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
@@ -25,7 +25,7 @@ class TutorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tutor
         fields = '__all__'
-        
+
 class EstudianteCreateSerializer(serializers.ModelSerializer):
     persona = serializers.PrimaryKeyRelatedField(queryset=Persona.objects.all())
 
@@ -39,11 +39,11 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = 'cedula'
-
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+
+        # Añadir información adicional al token
         try:
             if hasattr(user, 'tutor_profile'):
                 token['role'] = 'tutor'
@@ -56,52 +56,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         except Persona.DoesNotExist:
             token['role'] = 'unknown'
 
-    def validate(self, attrs):
-        credentials = {self.username_field: attrs[self.username_field], 'password': attrs['password']}
-        self.user = authenticate(**credentials)
+        return token
 
-        if not self.user or not self.user.is_active:
-            raise AuthenticationFailed('No active account found with the given credentials')
-
-        data = {}
-
-        refresh = self.get_token(self.user)
-        data['refresh'] = str(refresh)
-        data['access'] = str(refresh.access_token)
-
-        # Agregar información adicional al token
-        data['user_type'] = self.get_user_type(self.user)
-
-        return data
-
-    def get_user_type(self, user):
-        if hasattr(user, 'administrador'):
-            return 'Administrador'
-        elif hasattr(user, 'tutor'):
-            return 'Tutor'
-        else:
-            return 'Unknown'
-        
-
-
-    def validate(self, attrs):
-        credentials = {self.username_field: attrs[self.username_field], 'password': attrs['password']}
-        self.user = authenticate(**credentials)
-
-        if not self.user or not self.user.is_active:
-            raise AuthenticationFailed('No active account found with the given credentials')
-
-        data = {}
-
-        refresh = self.get_token(self.user)
-        data['refresh'] = str(refresh)
-        data['access'] = str(refresh.access_token)
-
-        # Agregar información adicional al token
-        data['user_type'] = self.get_user_type(self.user)
-
-        return data
-    
     def validate(self, attrs):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
@@ -111,26 +67,24 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['role'] = refresh['role']
         
         if 'idtutor' in refresh:
-            data['idtutor'] = refresh['idtutor']
+            data['id'] = refresh['idtutor']
         if 'idadministrador' in refresh:
-            data['idadministrador'] = refresh['idadministrador']
+            data['id'] = refresh['idadministrador']
         
         return data
-
-    def get_user_type(self, user):
-        if hasattr(user, 'administrador'):
-            return 'Administrador'
-        elif hasattr(user, 'tutor'):
-            return 'Tutor'
-        else:
-            return 'Unknown'
         
 class HorarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = horario
         fields = '__all__'
 
-
+class HorarioAulaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = horario_aula
+        fields = '__all__'
+        extra_kwargs = {
+            'profesor': {'required': False}  # Hacer que el campo profesor no sea obligatorio
+        }
 #NUEVOOOO        
 class InstitucionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -138,7 +92,7 @@ class InstitucionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AulaSerializer(serializers.ModelSerializer):
-    institucion = InstitucionSerializer(read_only=True)
+
     class Meta:
         model = Aula
         fields =['idaula', 'grado', 'gradunum', 'grupo', 'jornada', 'institucion']
@@ -152,6 +106,14 @@ class EstudianteDetailSerializer(serializers.ModelSerializer):
         model = Estudiante
         fields = '__all__'
 
+class EstudianteUpdateSerializer(serializers.ModelSerializer):
+    persona = PersonaSerializer()
+    instituciones = serializers.PrimaryKeyRelatedField(queryset=Instituciones.objects.all())
+    aula = serializers.PrimaryKeyRelatedField(queryset=Aula.objects.all())
+
+    class Meta:
+        model = Estudiante
+        fields = '__all__'
 
 class AsistenciaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -205,3 +167,22 @@ class NotasSerializer(serializers.ModelSerializer):
     def get_tutor_nombre_completo(self, obj):
         # Genera el nombre completo del tutor
         return f"{obj.tutor.persona.primer_nombre} {obj.tutor.persona.primer_apellido}"
+    
+class EstudianteNotasSerializer(serializers.ModelSerializer):
+    persona = PersonaSerializer()
+
+    class Meta:
+        model = Estudiante
+        fields = ['idestudiante', 'persona']
+
+class NotasDetailSerializer(serializers.ModelSerializer):
+    estudiante = EstudianteNotasSerializer()
+    bloque1 = serializers.FloatField(default=0.0)
+    bloque2 = serializers.FloatField(default=0.0)
+    bloque3 = serializers.FloatField(default=0.0)
+    bloque4 = serializers.FloatField(default=0.0)
+    calificacion_final = serializers.FloatField(default=0.0)
+
+    class Meta:
+        model = Notas
+        fields = ['idnota', 'estudiante', 'aula', 'bloque1', 'bloque2', 'bloque3', 'bloque4', 'calificacion_final']

@@ -11,6 +11,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./profile/profile.component').then((m) => m.ProfileComponent),
       },
+
+      {
+        path: 'dashboard', component: MainPageComponent,
+      },
       {
         path: 'students',
         loadComponent: () =>
@@ -64,6 +68,14 @@ export const routes: Routes = [
           import('./aula-page/aula-page.component').then(
             (m) => m.AulaPageComponent
           ),
+      },
+      
+
+      {path:'aula/:idaula',
+      loadComponent:()=>
+        import('./aula-page/aula-page.component').then(
+          (m)=> m.AulaPageComponent),
+
       },
     ],
   },

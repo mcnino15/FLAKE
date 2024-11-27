@@ -18,17 +18,50 @@ export class MainPageComponent {
   profileService = inject(ProfileService);
   router = inject(Router);
   showWelcomeMessage: boolean = true;
+  isTutor = !this.auth.isAdministrator();
   rutasAside = [
-    { nombre: 'Perfil', path: 'profile'},
-    { nombre: 'Gestión de estudiantes', path: 'students', icon:'pi pi-users' },
-    { nombre: 'Gestión de tutores', path: 'tutors', icon:'pi pi-briefcase' },
-    { nombre: 'Gestión de aulas', path: 'aulasmg' , icon:'pi pi-home'},
-    { nombre: 'Instituciones', path: 'institutionsmg'},
-    { nombre: 'Aulas', path: 'aula' },
-    { nombre: 'Asistencias', path: 'assistance' },
-    { nombre: 'Horarios', path: 'schedules' },
+    { nombre: 'Perfil', path: 'profile', icon: 'pi pi-user', forTutor: true },
+    {
+      nombre: 'Gestión de estudiantes',
+      path: 'students',
+      icon: 'pi pi-users',
+      forTutor: false,
+    },
+    {
+      nombre: 'Gestión de tutores',
+      path: 'tutors',
+      icon: 'pi pi-briefcase',
+      forTutor: false,
+    },
+    {
+      nombre: 'Gestión de aulas',
+      path: 'aulasmg',
+      icon: 'pi pi-home',
+      forTutor: false,
+    },
+    {
+      nombre: 'Instituciones',
+      path: 'institutionsmg',
+      icon: 'pi pi-building',
+      forTutor: false,
+    },
+    {
+      nombre: 'Aulas',
+      path: 'aula',
+      icon: 'pi pi-building-columns',
+      forTutor: true,
+    },
+    {
+      nombre: 'Horarios',
+      path: 'schedules',
+      icon: 'pi pi-calendar-clock',
+      forTutor: false,
+    },
   ];
-
+  mainPage() {
+    this.showWelcomeMessage = true;
+    this.router.navigate(['/dashboard']);
+  }
   logout() {
     this.auth.logOut();
     console.log(this.auth.isLoggedIn());

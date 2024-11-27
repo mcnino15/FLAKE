@@ -1,5 +1,5 @@
 <div class="card flex justify-content-center">
-  <a [routerLink]="aula().idaula.toString()">
+  <a  [routerLink]="aula().idaula.toString() ">
     <p-card
       [header]="'Grupo: ' + aula().grupo.toString()"
       [style]="{ width: '360px' }"
@@ -10,7 +10,7 @@
       </p>
       <h3>Institución</h3>
       <p>
-        {{ aula().institucion }}
+        {{ aula().institucion}}
       </p>
     </p-card>
   </a>

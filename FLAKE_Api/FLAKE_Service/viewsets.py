@@ -2,12 +2,12 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Administrador, Persona, Tutor, horario, Aula, Instituciones, asistencia, Estudiante, Notas,AsistenciaTutor
-from .serializers import AdminSerializer, PersonaSerializer, TutorDetailSerializer,TutorCreateSerializer,AsistenciaTutorSerializer,EstudianteCreateSerializer, EstudianteDetailSerializer,HorarioSerializer, AulaSerializer, InstitucionSerializer, AsistenciaSerializer, fullnameEstudianteSerializer,NotasSerializer
+from .models import Administrador, Persona, Tutor, horario, Aula, Instituciones, asistencia, Estudiante, Notas,AsistenciaTutor, horario_aula
+from .serializers import AdminSerializer, EstudianteUpdateSerializer, NotasDetailSerializer, PersonaSerializer, TutorDetailSerializer,TutorCreateSerializer,AsistenciaTutorSerializer,EstudianteCreateSerializer, EstudianteDetailSerializer,HorarioSerializer, AulaSerializer, InstitucionSerializer, AsistenciaSerializer, fullnameEstudianteSerializer,NotasSerializer, HorarioAulaSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser  
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import LoginSerializer
 from django.contrib.auth import authenticate
@@ -198,7 +198,17 @@ class TutorViewSet(viewsets.ModelViewSet):
         serializer = TutorDetailSerializer(tutores, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-
+    @action(detail=False, methods=['get'], url_path='por-aula/(?P<aula_id>[^/.]+)')
+    def tutores_por_aula(self, request, aula_id=None):
+        try:
+            aula = Aula.objects.get(pk=aula_id)
+        except Aula.DoesNotExist:
+            return Response({"error": "Aula no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        
+        tutores = Tutor.objects.filter(aula=aula)
+        serializer = TutorDetailSerializer(tutores, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
     @swagger_auto_schema(
         request_body=TutorDetailSerializer,
         responses={200: TutorDetailSerializer, 400: 'Bad Request'}
@@ -230,7 +240,8 @@ class TutorViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
-
+    
+    
 
 
 
@@ -259,6 +270,7 @@ class EstudianteViewSet(viewsets.ModelViewSet):
                 'genero': openapi.Schema(type=openapi.TYPE_STRING, description='Género'),
                 'fecha_nacimiento': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATE, description='Fecha de nacimiento'),
                 'estrato': openapi.Schema(type=openapi.TYPE_STRING, description='Estrato'),
+                'correo': openapi.Schema(type=openapi.TYPE_STRING, description='Correo electrónico'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Contraseña'),
                 'instituciones': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID de la institución'),
                 'aula': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID del aula'),
@@ -330,8 +342,40 @@ class EstudianteViewSet(viewsets.ModelViewSet):
             return Response({"error": "Aula no encontrada"}, status=status.HTTP_404_NOT_FOUND)
         
         estudiantes = Estudiante.objects.filter(aula=aula)
-        serializer = EstudianteDetailSerializer(estudiantes, many=True)
+        serializer = EstudianteUpdateSerializer(estudiantes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @swagger_auto_schema(
+        request_body=EstudianteUpdateSerializer,
+        responses={200: EstudianteUpdateSerializer, 400: 'Bad Request'}
+    )
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        persona_data = request.data.pop('persona', None)
+        if persona_data:
+            persona_serializer = PersonaSerializer(instance.persona, data=persona_data, partial=partial)
+            if persona_serializer.is_valid():
+                persona_serializer.save()
+            else:
+                return Response(persona_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        request.data['persona'] = instance.persona.id
+
+        estudiante_serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        if estudiante_serializer.is_valid():
+            estudiante_serializer.save()
+            return Response(estudiante_serializer.data)
+        return Response(estudiante_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @swagger_auto_schema(
+        request_body=EstudianteUpdateSerializer,
+        responses={200: EstudianteUpdateSerializer, 400: 'Bad Request'}
+    )
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
 
 
@@ -409,6 +453,80 @@ class NotasViewSet(viewsets.ModelViewSet):
             return Response({"error": "El tutor no existe."}, status=status.HTTP_404_NOT_FOUND)
         except Estudiante.DoesNotExist:
             return Response({"error": "El estudiante no existe."}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    @action(detail=False, methods=['get'], url_path='estudiantes-por-aula/(?P<aula_id>[^/.]+)')
+    def estudiantes_por_aula(self, request, aula_id=None):
+        try:
+            aula = Aula.objects.get(idaula=aula_id)
+            estudiantes = Estudiante.objects.filter(aula=aula)
+
+            resultados = []
+            for estudiante in estudiantes:
+                try:
+                    notas = Notas.objects.get(estudiante=estudiante, aula=aula)
+                except Notas.DoesNotExist:
+                    notas = Notas(
+                        estudiante=estudiante,
+                        aula=aula,
+                        bloque1=0.0,
+                        bloque2=0.0,
+                        bloque3=0.0,
+                        bloque4=0.0,
+                        calificacion_final=0.0
+                    )
+                serializer = NotasDetailSerializer(notas)
+                resultados.append(serializer.data)
+
+            return Response(resultados, status=status.HTTP_200_OK)
+        except Aula.DoesNotExist:
+            return Response({"error": "El aula especificada no existe."}, status=status.HTTP_404_NOT_FOUND)
+        
+
+    @action(detail=False, methods=['put'], url_path='actualizar-notas/(?P<estudiante_id>[^/.]+)/(?P<aula_id>[^/.]+)')
+    def actualizar_notas(self, request, estudiante_id=None, aula_id=None):
+        """
+        Actualiza las notas de un estudiante en un aula específica.
+        """
+        bloque1 = request.data.get('bloque1')
+        bloque2 = request.data.get('bloque2')
+        bloque3 = request.data.get('bloque3')
+        bloque4 = request.data.get('bloque4')
+
+        try:
+            estudiante = Estudiante.objects.get(idestudiante=estudiante_id)
+            aula = Aula.objects.get(idaula=aula_id)
+
+            notas, created = Notas.objects.get_or_create(
+                estudiante=estudiante,
+                aula=aula,
+                defaults={
+                    "bloque1": bloque1,
+                    "bloque2": bloque2,
+                    "bloque3": bloque3,
+                    "bloque4": bloque4,
+                },
+            )
+
+            if not created:
+                if bloque1 is not None:
+                    notas.bloque1 = bloque1
+                if bloque2 is not None:
+                    notas.bloque2 = bloque2
+                if bloque3 is not None:
+                    notas.bloque3 = bloque3
+                if bloque4 is not None:
+                    notas.bloque4 = bloque4
+                notas.calcular_calificacion_final()
+                notas.save()
+
+            serializer = NotasSerializer(notas)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Estudiante.DoesNotExist:
+            return Response({"error": "El estudiante no existe."}, status=status.HTTP_404_NOT_FOUND)
+        except Aula.DoesNotExist:
+            return Response({"error": "El aula especificada no existe."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class PersonaViewSet(viewsets.ModelViewSet):
@@ -586,7 +704,65 @@ class AsistenciaViewSet(viewsets.ModelViewSet):
 
         return Response({'mensaje': 'Asistencias registradas exitosamente.'}, status=status.HTTP_200_OK)
 
+class HorarioAulaViewSet(viewsets.ModelViewSet):
+    queryset = horario_aula.objects.all()
+    serializer_class = HorarioAulaSerializer
+    @action(detail=False, methods=['post'], url_path='crear-horario-poraula')
+    def crear_horario_poraula(self, request):
+        data = request.data
+        aula_id = data.get("aula")
+        fecha_inicio = data.get("fechainicio")
+        fecha_final = data.get("fechafin")
+        hora_inicio_str = data.get("hora_inicio")
+        hora_fin_str = data.get("hora_fin")
+        dia_inicial = data.get("diainicial")
+        dia_inicial_text = data.get("diainicial_text")
+        
+        # Validar que el aula exista
+        try:
+            aula = Aula.objects.get(idaula=aula_id)
+        except Aula.DoesNotExist:
+            return Response({"error": "El aula especificada no existe."}, status=status.HTTP_404_NOT_FOUND)
 
+        # Validar el formato de las horas
+        try:
+            hora_inicio = datetime.strptime(hora_inicio_str, '%H:%M').time()
+            hora_fin = datetime.strptime(hora_fin_str, '%H:%M').time()
+        except ValueError:
+            return Response({"error": "El formato de la hora es inválido. Usa 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validar que la hora de inicio sea antes de la hora de fin
+        if hora_inicio >= hora_fin:
+            return Response({"error": "La hora de inicio debe ser antes de la hora de fin."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validar que el horario no se solape con uno existente
+        horarios_existentes = horario_aula.objects.filter(
+            aula=aula,
+            diainicial=dia_inicial,
+            hora_inicio__lt=hora_fin,
+            hora_fin__gt=hora_inicio
+        )
+        if horarios_existentes.exists():
+            return Response({"error": "El horario se cruza con otro existente para esta aula."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Crear el horario
+        horario_data = {
+            "aula": aula.idaula,
+            "fechainicio": fecha_inicio,
+            "fechafin": fecha_final,
+            "hora_inicio": hora_inicio,
+            "hora_fin": hora_fin,
+            "diainicial": dia_inicial,
+            "diainicial_text": dia_inicial_text
+        }
+
+        serializer = HorarioAulaSerializer(data=horario_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class AsistenciaTutorViewSet(viewsets.ModelViewSet):
     queryset = AsistenciaTutor.objects.all()
     serializer_class = AsistenciaTutorSerializer

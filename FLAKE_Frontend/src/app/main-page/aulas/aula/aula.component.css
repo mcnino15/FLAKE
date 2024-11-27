@@ -1,3 +1,58 @@
 a {
   text-decoration: none;
 }
+
+.card {
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #5e60c932;
+}
+
+.card a { 
+  text-decoration: none;
+  color: inherit;
+}
+
+.card p-card {
+  cursor: pointer;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.card p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.card ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.card ul li:last-child {
+  border-bottom: none;
+}
+
+.card ul li:hover {
+  background-color: #f9f9f9;
+}
+
+.card .students-list {
+  margin-top: 20px;
+}
+
+.card .students-list h3 {
+  margin-bottom: 10px;
+  color: #333;
+}

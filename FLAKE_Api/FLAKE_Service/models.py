@@ -138,7 +138,7 @@ class Notas(models.Model):
             self.calificacion_final = None
             self.save()
 
-    def __str__(self):
+    def _str_(self):
         return f"Notas de {self.estudiante.persona.primer_nombre} {self.estudiante.persona.primer_apellido}"
 
 class asistencia(models.Model):
@@ -188,6 +188,19 @@ class horario(models.Model):
     class Meta:
         unique_together = ('profesor', 'hora_inicio', 'hora_fin', 'diainicial')  # Restricción única para evitar solapamiento de horarios
 
+class horario_aula(models.Model):
+    idhorario = models.AutoField(primary_key=True)
+    fechainicio=models.CharField()
+    fechafin=models.CharField()
+    hora_inicio = models.TimeField()  
+    hora_fin = models.TimeField()  
+    diainicial = models.CharField(max_length=2)  
+    diainicial_text = models.CharField()  
+    aula = models.ForeignKey(Aula, on_delete=models.CASCADE) 
+
+    def _str_(self):
+        return f"{self.profesor} - {self.diainicial} to {self.diafinal} - {self.hora_inicio} to {self.hora_fin}"
+    
 class year_electivo(models.Model):
     idyear=models.AutoField(primary_key=True)
     year=models.FloatField()

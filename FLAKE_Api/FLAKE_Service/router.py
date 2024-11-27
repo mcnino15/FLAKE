@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .viewsets import AdminViewSet, TutorViewSet,EstudianteViewSet,PersonaViewSet, HorarioViewSet, AulaViewSet, InstitucionViewSet, AsistenciaViewSet,NotasViewSet,AsistenciaTutorViewSet
+from .viewsets import AdminViewSet, TutorViewSet,EstudianteViewSet,PersonaViewSet, HorarioViewSet, AulaViewSet, InstitucionViewSet, AsistenciaViewSet,NotasViewSet,AsistenciaTutorViewSet,HorarioAulaViewSet
 
 router = DefaultRouter()
 router.register(r'administradores', AdminViewSet)
@@ -12,3 +12,4 @@ router.register(r'instituciones', InstitucionViewSet)
 router.register(r'asistencia', AsistenciaViewSet)
 router.register(r'asistencia-tutor', AsistenciaTutorViewSet, basename='asistencia-tutor')
 router.register(r'notas', NotasViewSet)
+router.register(r'horario-aulas', HorarioAulaViewSet,basename='horario-aulas')

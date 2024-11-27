@@ -11,6 +11,11 @@
   align-items: center;
   position: relative;
 }
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 .logo {
   width: 4.5rem;
   height: 4.5rem;
@@ -68,7 +73,7 @@
   line-height: 1;
 }
 .sidebar-btn span {
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 .text {
@@ -116,7 +121,6 @@
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   text-align: left;
-
 }
 .sidebar-btn:hover {
   background-color: #7886bb;

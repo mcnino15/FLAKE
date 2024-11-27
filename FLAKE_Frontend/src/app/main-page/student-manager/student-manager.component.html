@@ -1,8 +1,11 @@
 <div class="card table-container">
   <button class="new" (click)="toggleFormulario()">New</button>
+  
   <h1 class="title">Gestión de estudiantes</h1>
+
   <p-toast></p-toast>
   <p-table
+    #table
     [value]="estudiantes"
     dataKey="id"
     editMode="row"
